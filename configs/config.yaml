@@ -1,0 +1,9 @@
+defaults:
+  - model: node_sigmoid
+  - dataset: cifar10
+  - training: default
+  - _self_
+
+experiment_name: "s_conv_node_cifar_10"
+seed: 42
+base_path: "./data"

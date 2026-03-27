@@ -1,0 +1,5 @@
+_target_: src.data.datamodule.get_dataloaders
+data_dir: "./data"
+batch_size: 128
+train_size: 5000
+test_size: 5000

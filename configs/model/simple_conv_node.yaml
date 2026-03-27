@@ -1,0 +1,5 @@
+_target_: src.models.architectures.SimpleConv_Node_Sigmoid
+num_classes: 10
+layer_dim: 16
+num_layers: 3
+depth: 5

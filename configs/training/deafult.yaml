@@ -1,0 +1,7 @@
+num_epochs: 100
+batch_size: 128
+early_stopping_patience: 10
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 1e-3
+  weight_decay: 1e-4
