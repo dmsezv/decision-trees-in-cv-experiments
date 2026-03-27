@@ -4,7 +4,7 @@ import torch.nn as nn
 from src.models.components import NODE_SE_Block
 
 
-class SimpleConv_Node(nn.Module):
+class SimpleConv_Node_SE(nn.Module):
     """
     Как работает:
     Плавно сжимает любое число в диапазон от 0 до 1.

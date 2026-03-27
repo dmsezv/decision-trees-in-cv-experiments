@@ -1,0 +1,3 @@
+_target_: src.models.architectures.SimpleConv_Classic_SE
+num_classes: 10
+reduction: 4
