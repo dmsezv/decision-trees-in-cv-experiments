@@ -1,7 +1,10 @@
 import hydra
 import mlflow
 import torch
+import torch.nn as nn
 from omegaconf import DictConfig, OmegaConf
+
+from src.training.trainer import train_validate_loop
 
 
 @hydra.main(version_base="1.3", config_path="configs", config_name="config")
@@ -12,15 +15,35 @@ def main(cfg: DictConfig):
     device = torch.device(
         "mps" if torch.backends.mps.is_available() else "cuda" if torch.cuda.is_available() else "cpu"
     )
-    print(f"Используемое устройство: {device}")
+    print(f"[INFO] Device: {device}")
 
-    with mlflow.start_run(run_name=cfg.model._target_.split(".")[-1]):
+    train_loader, test_loader = hydra.utils.instantiate(cfg.dataset)
+
+    model = hydra.utils.instantiate(cfg.model).to(device)
+    if hasattr(model, "initial_weights"):
+        print("[INFO] Initial NODE weights")
+        model.initial_weights(loader=train_loader, device=device)
+
+    optimizer = hydra.utils.instantiate(cfg.training.optimizer, params=model.parameters())
+    criterion = nn.CrossEntropyLoss()
+
+    run_name = cfg.model._target_.split(".")[-1]
+    with mlflow.start_run(run_name=run_name):
         mlflow.log_params(OmegaConf.to_container(cfg, resolve=True))
 
-        print(f"=== Запуск эксперимента: {cfg.experiment_name} ===")
-        print(f"Конфигурация:\n{OmegaConf.to_yaml(cfg)}")
+        print(f"=== Start experiment: {cfg.experiment_name} ===")
+        print(f"[INFO] Configuration:\n{OmegaConf.to_yaml(cfg)}")
 
-        pass
+        train_validate_loop(
+            model=model,
+            train_loader=train_loader,
+            test_loader=test_loader,
+            opt=optimizer,
+            crt=criterion,
+            device=device,
+            num_epochs=cfg.training.num_epochs,
+            early_stopping_patience=cfg.training.early_stopping_patience,
+        )
 
 
 if __name__ == "__main__":
