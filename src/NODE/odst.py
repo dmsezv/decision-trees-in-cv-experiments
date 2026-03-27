@@ -69,7 +69,9 @@ class ODST(ModuleWithInit):
         self.response = nn.Parameter(torch.zeros([num_trees, tree_dim, 2**depth]), requires_grad=True)
         initialize_response_(self.response)
 
-        self.feature_selection_logits = nn.Parameter(torch.zeros([in_features, num_trees, depth]), requires_grad=True)
+        self.feature_selection_logits = nn.Parameter(
+            torch.zeros([in_features, num_trees, depth]), requires_grad=True
+        )
         initialize_selection_logits_(self.feature_selection_logits)
 
         self.feature_thresholds = nn.Parameter(
