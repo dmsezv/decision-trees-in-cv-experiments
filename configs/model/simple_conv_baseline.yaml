@@ -1,5 +1,2 @@
-_target_: src.models.architectures.SimpleConv_Baseline
+_target_: src.models.architectures.simple_convolution_models.SimpleConv_Baseline
 num_classes: 10
-layer_dim: 16
-num_layers: 3
-depth: 5

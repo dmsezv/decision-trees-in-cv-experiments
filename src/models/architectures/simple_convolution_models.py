@@ -1,7 +1,91 @@
 import torch
 import torch.nn as nn
 
-from src.models.components import NODE_SE_Block
+from src.models.components.se_blocks import Classic_SE_Block, NODE_SE_Block
+
+
+
+class SimpleConv_Baseline(nn.Module):
+    def __init__(self, num_classes):
+        """
+        Описание:
+        Классическая сверточная нейронная сеть (CNN), выступающая в роли контрольной модели.
+        Архитектура состоит из простого последовательного извлекателя признаков (backbone)
+        и линейного классификатора (head).
+        Backbone включает в себя три сверточных блока, каждый из которых состоит из операции свертки (Conv2d),
+        пакетной нормализации (BatchNorm2d), функции активации (ReLU) и операции подвыборки (MaxPool2d).
+        Размерность каналов увеличивается последовательно: 16 → 32 → 64.
+
+        Механика работы:
+        Модель применяет статическую фильтрацию.
+        Матрицы весов внутри Conv2d одинаково обрабатывают каждое входящее изображение,
+        извлекая универсальный набор признаков независимо от контекста и класса объекта.
+
+        Роль в исследовании:
+        Демонстрирует проблему раннего переобучения (overfitting) на малых выборках и задает базовую планку
+        (baseline) точности и вычислительной сложности, с которой сравниваются гибридные архитектуры.
+        """
+        super().__init__()
+        self.backbone = nn.Sequential(
+            nn.Conv2d(3, 16, 3, padding=1),
+            nn.BatchNorm2d(16),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+            nn.Conv2d(16, 32, 3, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+            nn.Conv2d(32, 64, 3, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+        )
+
+        self.head = nn.Linear(64 * 4 * 4, num_classes)
+
+    def forward(self, x):
+        x = self.backbone(x)
+        x = x.flatten(1)
+        return self.head(x)
+
+
+
+class SimpleConv_Classic_SE(nn.Module):
+    """Сверточная сеть с классическим SE-вниманием"""
+
+    def __init__(self, num_classes, reduction=4):
+        super().__init__()
+
+        self.layer1 = nn.Sequential(
+            nn.Conv2d(3, 16, 3, padding=1), nn.BatchNorm2d(16), nn.ReLU(), nn.MaxPool2d(2)
+        )
+
+        self.layer2 = nn.Sequential(
+            nn.Conv2d(16, 32, 3, padding=1), nn.BatchNorm2d(32), nn.ReLU(), nn.MaxPool2d(2)
+        )
+
+        self.se2 = Classic_SE_Block(channels=32, reduction=reduction)
+
+        self.layer3 = nn.Sequential(
+            nn.Conv2d(32, 64, 3, padding=1), nn.BatchNorm2d(64), nn.ReLU(), nn.MaxPool2d(2)
+        )
+
+        self.se3 = Classic_SE_Block(channels=64, reduction=reduction)
+
+        self.head = nn.Linear(64 * 4 * 4, num_classes)
+
+    def forward(self, x):
+        x = self.layer1(x)
+
+        x = self.layer2(x)
+        x = self.se2(x)
+
+        x = self.layer3(x)
+        x = self.se3(x)
+
+        x = torch.flatten(x, 1)
+        return self.head(x)
+
 
 
 class SimpleConv_Node_SE(nn.Module):

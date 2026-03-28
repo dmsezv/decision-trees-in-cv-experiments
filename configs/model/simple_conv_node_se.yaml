@@ -1,4 +1,4 @@
-_target_: src.models.architectures.SimpleConv_Node_SE
+_target_: src.models.architectures.simple_convolution_models.SimpleConv_Node_SE
 num_classes: 10
 layer_dim: 16
 num_layers: 3

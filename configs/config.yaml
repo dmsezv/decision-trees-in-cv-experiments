@@ -1,5 +1,5 @@
 defaults:
-  - model: simple_conv_classic_se
+  - model: simple_conv_node_se
   - dataset: cifar10
   - training: default
   - _self_
