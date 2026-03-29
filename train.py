@@ -20,6 +20,8 @@ def main(cfg: DictConfig):
     print(f"[INFO] Device: {device}")
 
     train_loader, test_loader = hydra.utils.instantiate(cfg.dataset)
+    sample_inputs, _ = next(iter(train_loader))
+    img_size = tuple(sample_inputs.shape[1:])
 
     model = hydra.utils.instantiate(cfg.model).to(device)
     if hasattr(model, "initial_weights"):
@@ -38,7 +40,7 @@ def main(cfg: DictConfig):
         print(f"=== Start experiment: {cfg.experiment_name} ===")
         print(f"[INFO] Configuration:\n{OmegaConf.to_yaml(cfg)}")
 
-        macs, params = log_macs_and_params(model, device)
+        macs, params = log_macs_and_params(model, device, img_size)
         mlflow.log_params({
             "macs": macs,
             "trainable_params": params
