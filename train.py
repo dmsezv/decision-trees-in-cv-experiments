@@ -5,6 +5,8 @@ import torch.nn as nn
 from omegaconf import DictConfig, OmegaConf
 
 from src.training.trainer import train_validate_loop
+from src.utils.metrics import log_macs_and_params, measure_inference_fps
+from src.utils.utils import flatten_dict
 
 
 @hydra.main(version_base="1.3", config_path="configs", config_name="config")
@@ -29,10 +31,18 @@ def main(cfg: DictConfig):
 
     run_name = cfg.model._target_.split(".")[-1]
     with mlflow.start_run(run_name=run_name):
-        mlflow.log_params(OmegaConf.to_container(cfg, resolve=True))
+        cfg_dict = OmegaConf.to_container(cfg, resolve=True)
+        flat_cfg = flatten_dict(cfg_dict)
+        mlflow.log_params(flat_cfg)
 
         print(f"=== Start experiment: {cfg.experiment_name} ===")
         print(f"[INFO] Configuration:\n{OmegaConf.to_yaml(cfg)}")
+
+        macs, params = log_macs_and_params(model, device)
+        mlflow.log_params({
+            "macs": macs,
+            "trainable_params": params
+        })
 
         train_validate_loop(
             model=model,
@@ -45,6 +55,13 @@ def main(cfg: DictConfig):
             early_stopping_patience=cfg.training.early_stopping_patience,
         )
 
+        fps_batch_1 = measure_inference_fps(model, device, batch_size=1)
+        fps_batch_64 = measure_inference_fps(model, device, batch_size=64)
+
+        mlflow.log_metrics({
+            "fps_batch_1": fps_batch_1,
+            "fps_batch_64": fps_batch_64
+        })
 
 if __name__ == "__main__":
     main()
