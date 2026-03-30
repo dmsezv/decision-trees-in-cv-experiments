@@ -1,2 +1,2 @@
 _target_: src.models.architectures.simple_convolution_models.SimpleConv_Baseline
-num_classes: 10
+num_classes: 100

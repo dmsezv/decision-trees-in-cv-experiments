@@ -46,7 +46,7 @@ def main(cfg: DictConfig):
             "trainable_params": params
         })
 
-        train_validate_loop(
+        best_val_accuracy = train_validate_loop(
             model=model,
             train_loader=train_loader,
             test_loader=test_loader,
@@ -64,6 +64,8 @@ def main(cfg: DictConfig):
             "fps_batch_1": fps_batch_1,
             "fps_batch_64": fps_batch_64
         })
+
+        return best_val_accuracy
 
 if __name__ == "__main__":
     main()

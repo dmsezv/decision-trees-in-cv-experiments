@@ -5,7 +5,6 @@ def flatten_dict(d, parent_key='', sep='.'):
         if isinstance(v, dict):
             items.extend(flatten_dict(v, new_key, sep=sep).items())
         elif isinstance(v, list):
-            # Списки просто превращаем в строку, чтобы они не ломали MLflow
             items.append((new_key, str(v)))
         else:
             items.append((new_key, v))
