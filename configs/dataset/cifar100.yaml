@@ -1,6 +1,7 @@
 _target_: src.data.datamodule.get_dataloaders
 dataset_name: cifar100
 data_dir: "./data"
+num_classes: 100
 batch_size: 128
 train_size: 50000
 test_size: 5000

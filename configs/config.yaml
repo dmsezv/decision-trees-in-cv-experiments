@@ -1,9 +1,9 @@
 defaults:
   - model: simple_conv_node_se
-  - dataset: cifar100
+  - dataset: cifar10
   - training: default
   - _self_
 
-experiment_name: "simple_conv_conv_se_cifar_100"
+experiment_name: "simple_conv_se_cifar_100"
 seed: 42
 base_path: "./data"

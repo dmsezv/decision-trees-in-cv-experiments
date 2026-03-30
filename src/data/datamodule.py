@@ -6,6 +6,7 @@ def get_dataloaders(
     dataset_name: str,
     data_dir: str,
     batch_size: int,
+    num_classes: int,
     train_size: int | None = None,
     test_size: int | None = None,
 ):
