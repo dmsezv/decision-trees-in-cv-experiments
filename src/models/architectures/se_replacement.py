@@ -4,7 +4,6 @@ import torch.nn as nn
 from src.models.components.se_blocks import Classic_SE_Block, NODE_SE_Block
 
 
-
 class SimpleConv_Baseline(nn.Module):
     def __init__(self, num_classes):
         """
@@ -49,7 +48,6 @@ class SimpleConv_Baseline(nn.Module):
         return self.head(x)
 
 
-
 class SimpleConv_Classic_SE(nn.Module):
     """Сверточная сеть с классическим SE-вниманием"""
 
@@ -85,7 +83,6 @@ class SimpleConv_Classic_SE(nn.Module):
 
         x = torch.flatten(x, 1)
         return self.head(x)
-
 
 
 class SimpleConv_Node_SE(nn.Module):
@@ -160,7 +157,6 @@ class SimpleConv_Node_SE(nn.Module):
         x = torch.flatten(x, 1)
         return self.head(x)
 
-    @torch.no_grad
     def initial_weights(self, loader, device):
         self.eval()
         init_inputs = []

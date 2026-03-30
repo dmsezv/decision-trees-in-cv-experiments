@@ -21,7 +21,7 @@ dependencies = [
 [tool.ruff]
 line-length = 110
 
-extend-exclude = ["src/NODE"]
+extend-exclude = ["external/NODE"]
 
 [tool.ruff.lint]
 # E (pycodestyle), F (pyflakes), I (isort - сортировка импортов)

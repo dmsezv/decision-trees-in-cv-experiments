@@ -1,0 +1,5 @@
+_target_: src.models.architectures.linear_replacement.ResNet18_NODE
+num_classes: ${dataset.num_classes}
+layer_dim: 32
+num_layers: 2
+depth: 5

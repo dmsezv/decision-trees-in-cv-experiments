@@ -94,7 +94,6 @@ def train_validate_loop(
         sheduler.step(val_l)
         curr_lr = opt.param_groups[0]["lr"]
 
-
         mlflow.log_metrics(
             {
                 "train_accuracy": t_a,
@@ -102,7 +101,7 @@ def train_validate_loop(
                 "train_loss": t_l,
                 "val_accuracy": val_a,
                 "lr": curr_lr,
-                "overfitting_gap_acc": t_a - val_a
+                "overfitting_gap_acc": t_a - val_a,
             },
             step=epoch,
         )
@@ -122,13 +121,15 @@ def train_validate_loop(
     avg_train_time = sum(train_epoch_times) / len(train_epoch_times)
     avg_val_time = sum(val_epoch_times) / len(val_epoch_times)
     best_val_accuracy = max(test_accuracy)
-    
-    mlflow.log_metrics({
-        "best_val_accuracy": best_val_accuracy,
-        "avg_time_train_epoch_s": avg_train_time,
-        "avg_time_val_epoch_s": avg_val_time,
-        "epochs": epochs_count,
-        "total_time_s": total_time
-    })
+
+    mlflow.log_metrics(
+        {
+            "best_val_accuracy": best_val_accuracy,
+            "avg_time_train_epoch_s": avg_train_time,
+            "avg_time_val_epoch_s": avg_val_time,
+            "epochs": epochs_count,
+            "total_time_s": total_time,
+        }
+    )
 
     return best_val_accuracy

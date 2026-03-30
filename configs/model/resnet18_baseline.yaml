@@ -1,0 +1,2 @@
+_target_: src.models.architectures.linear_replacement.ResNet18_Baseline
+num_classes: ${dataset.num_classes}

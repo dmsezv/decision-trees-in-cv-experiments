@@ -41,10 +41,7 @@ def main(cfg: DictConfig):
         print(f"[INFO] Configuration:\n{OmegaConf.to_yaml(cfg)}")
 
         macs, params = log_macs_and_params(model, device, img_size)
-        mlflow.log_params({
-            "macs": macs,
-            "trainable_params": params
-        })
+        mlflow.log_params({"macs": macs, "trainable_params": params})
 
         best_val_accuracy = train_validate_loop(
             model=model,
@@ -60,12 +57,10 @@ def main(cfg: DictConfig):
         fps_batch_1 = measure_inference_fps(model, device, batch_size=1)
         fps_batch_64 = measure_inference_fps(model, device, batch_size=64)
 
-        mlflow.log_metrics({
-            "fps_batch_1": fps_batch_1,
-            "fps_batch_64": fps_batch_64
-        })
+        mlflow.log_metrics({"fps_batch_1": fps_batch_1, "fps_batch_64": fps_batch_64})
 
         return best_val_accuracy
+
 
 if __name__ == "__main__":
     main()
