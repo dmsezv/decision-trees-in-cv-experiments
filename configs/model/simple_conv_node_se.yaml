@@ -1,5 +1,5 @@
 _target_: src.models.architectures.simple_convolution_models.SimpleConv_Node_SE
-num_classes: 10
+num_classes: 100
 layer_dim: 16
 num_layers: 3
 depth: 5

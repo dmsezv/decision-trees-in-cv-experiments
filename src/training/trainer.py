@@ -121,13 +121,14 @@ def train_validate_loop(
     total_time = time.time() - start_time
     avg_train_time = sum(train_epoch_times) / len(train_epoch_times)
     avg_val_time = sum(val_epoch_times) / len(val_epoch_times)
+    best_val_accuracy = max(test_accuracy)
     
     mlflow.log_metrics({
-        "best_val_accuracy": max(test_accuracy),
+        "best_val_accuracy": best_val_accuracy,
         "avg_time_train_epoch_s": avg_train_time,
         "avg_time_val_epoch_s": avg_val_time,
         "epochs": epochs_count,
         "total_time_s": total_time
     })
 
-    return train_accuracy, train_loss, test_accuracy, test_loss, total_time
+    return best_val_accuracy
