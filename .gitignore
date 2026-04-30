@@ -217,3 +217,7 @@ multirun/
 # MLflow
 mlruns/
 mlflow.db
+*.db
+
+# MacOS
+.DS_Store
