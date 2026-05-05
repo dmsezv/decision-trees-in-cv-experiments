@@ -111,11 +111,12 @@ def train_validate_loop(
 
         if val_l < best_val_l:
             best_val_l = val_l
-            best_val_accuracy = val_a
             best_weights = copy.deepcopy(model.state_dict())
             epochs_no_improve = 0
         else:
             epochs_no_improve += 1
+
+        best_val_accuracy = max(best_val_accuracy, val_a)
 
         if epochs_no_improve >= early_stopping_patience:
             print(f"[INFO] Early stopping after {epoch + 1} epochs")

@@ -3,6 +3,8 @@
 defaults:
   - override /hydra/sweeper: optuna
 
+seeds: [42]
+
 hydra:
   sweeper:
     sampler:
@@ -25,4 +27,4 @@ hydra:
 
       model.layer_dim:
         type: categorical
-        choices: [16, 32, 64]
+        choices: [8, 16, 32]

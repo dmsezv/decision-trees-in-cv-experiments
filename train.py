@@ -1,3 +1,4 @@
+import gc
 import statistics
 from pathlib import Path
 
@@ -92,6 +93,9 @@ def main(cfg: DictConfig):
         for seed in cfg.seeds:
             metrics = _run_single_seed(cfg, seed, device, parent_run.info.run_id)
             all_metrics.append(metrics)
+            gc.collect()
+            if torch.backends.mps.is_available():
+                torch.mps.empty_cache()
 
         agg_keys = list(all_metrics[0].keys())
         agg_metrics = {}

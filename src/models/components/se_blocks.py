@@ -5,7 +5,7 @@ from external.NODE.arch import DenseBlock
 
 
 class Classic_SE_Block(nn.Module):
-    def __init__(self, channels, reduction=4):
+    def __init__(self, channels, reduction):
         """
         Классический SE-блок на базе полносвязных слоев (MLP).
         reduction: коэффициент сжатия бутылочного горлышка.

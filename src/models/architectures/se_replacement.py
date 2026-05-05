@@ -51,7 +51,7 @@ class SimpleConv_Baseline(nn.Module):
 class SimpleConv_Classic_SE(nn.Module):
     """Сверточная сеть с классическим SE-вниманием"""
 
-    def __init__(self, num_classes, reduction=4):
+    def __init__(self, num_classes, reduction):
         super().__init__()
 
         self.layer1 = nn.Sequential(
@@ -281,7 +281,7 @@ class NODE_SEBasicBlock(nn.Module):
 
     expansion = 1
 
-    def __init__(self, inplanes, planes, stride=1, downsample=None, layer_dim=8, num_layers=2, depth=4):
+    def __init__(self, inplanes, planes, stride=1, downsample=None, layer_dim=8, num_layers=1, depth=4):
         super().__init__()
         self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=3, stride=stride, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(planes)
@@ -320,7 +320,7 @@ class ResNet18_NODE_SE(nn.Module):
     решающих деревьев (NODE) вместо MLP в excitation-части.
     """
 
-    def __init__(self, num_classes: int, layer_dim: int = 8, num_layers: int = 2, depth: int = 4):
+    def __init__(self, num_classes: int, layer_dim: int = 8, num_layers: int = 1, depth: int = 4):
         super().__init__()
         self.inplanes = 64
         self._block_kwargs = {"layer_dim": layer_dim, "num_layers": num_layers, "depth": depth}

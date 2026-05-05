@@ -1,5 +1,5 @@
 _target_: src.models.architectures.se_replacement.ResNet18_NODE_SE
 num_classes: ${dataset.num_classes}
 layer_dim: 8
-num_layers: 2
+num_layers: 1
 depth: 4
