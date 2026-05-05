@@ -1,3 +1,4 @@
+import copy
 import time
 
 import mlflow
@@ -68,6 +69,8 @@ def train_validate_loop(
 
     sheduler = ReduceLROnPlateau(opt, mode="min", factor=0.1, patience=5)
     best_val_l = float("inf")
+    best_val_accuracy = 0.0
+    best_weights = copy.deepcopy(model.state_dict())
     epochs_no_improve = 0
 
     epochs_count = num_epochs
@@ -108,6 +111,8 @@ def train_validate_loop(
 
         if val_l < best_val_l:
             best_val_l = val_l
+            best_val_accuracy = val_a
+            best_weights = copy.deepcopy(model.state_dict())
             epochs_no_improve = 0
         else:
             epochs_no_improve += 1
@@ -117,10 +122,11 @@ def train_validate_loop(
             epochs_count = epoch + 1
             break
 
+    model.load_state_dict(best_weights)
+
     total_time = time.time() - start_time
     avg_train_time = sum(train_epoch_times) / len(train_epoch_times)
     avg_val_time = sum(val_epoch_times) / len(val_epoch_times)
-    best_val_accuracy = max(test_accuracy)
 
     mlflow.log_metrics(
         {
