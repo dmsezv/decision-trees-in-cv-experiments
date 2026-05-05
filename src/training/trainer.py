@@ -132,4 +132,10 @@ def train_validate_loop(
         }
     )
 
-    return best_val_accuracy
+    return {
+        "best_val_accuracy": best_val_accuracy,
+        "epochs": epochs_count,
+        "avg_time_train_epoch_s": avg_train_time,
+        "avg_time_val_epoch_s": avg_val_time,
+        "final_overfitting_gap": train_accuracy[-1] - test_accuracy[-1],
+    }

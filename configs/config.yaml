@@ -5,5 +5,5 @@ defaults:
   - _self_
 
 experiment_name: "simple_conv_se_cifar_100"
-seed: 42
+seeds: [12, 42, 55]
 base_path: "./data"

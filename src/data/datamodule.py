@@ -1,3 +1,4 @@
+import torch
 from torch.utils.data import DataLoader, Subset
 from torchvision import datasets, transforms
 
@@ -9,6 +10,9 @@ def get_dataloaders(
     num_classes: int,
     train_size: int | None = None,
     test_size: int | None = None,
+    num_workers: int = 4,
+    persistent_workers: bool = True,
+    seed: int | None = None,
 ):
     name = dataset_name.lower()
 
@@ -37,7 +41,27 @@ def get_dataloaders(
         test_ds = Subset(test_ds, list(range(test_size)))
         print(f"[DATA] Тестовая выборка ограничена до {test_size} семплов.")
 
-    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
-    test_loader = DataLoader(test_ds, batch_size=batch_size, shuffle=False)
+    _persistent = persistent_workers and num_workers > 0
+
+    generator = None
+    if seed is not None:
+        generator = torch.Generator()
+        generator.manual_seed(seed)
+
+    train_loader = DataLoader(
+        train_ds,
+        batch_size=batch_size,
+        shuffle=True,
+        num_workers=num_workers,
+        persistent_workers=_persistent,
+        generator=generator,
+    )
+    test_loader = DataLoader(
+        test_ds,
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=num_workers,
+        persistent_workers=_persistent,
+    )
 
     return train_loader, test_loader
