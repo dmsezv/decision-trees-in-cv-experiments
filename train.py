@@ -1,4 +1,5 @@
 import statistics
+from pathlib import Path
 
 import hydra
 import mlflow
@@ -51,6 +52,10 @@ def _run_single_seed(cfg: DictConfig, seed: int, device: torch.device, parent_ru
             num_epochs=cfg.training.num_epochs,
             early_stopping_patience=cfg.training.early_stopping_patience,
         )
+
+        checkpoint_dir = Path("checkpoints")
+        checkpoint_dir.mkdir(exist_ok=True)
+        torch.save(model.state_dict(), checkpoint_dir / f"{run_name}.pt")
 
         fps_batch_1 = measure_inference_fps(model, device, batch_size=1)
         fps_batch_64 = measure_inference_fps(model, device, batch_size=64)
