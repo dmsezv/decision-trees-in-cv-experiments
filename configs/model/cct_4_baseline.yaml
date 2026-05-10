@@ -1,0 +1,2 @@
+_target_: src.models.architectures.cct_replacement.CCT_4_Baseline
+num_classes: ${dataset.num_classes}
