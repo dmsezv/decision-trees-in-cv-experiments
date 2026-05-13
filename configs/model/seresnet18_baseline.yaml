@@ -1,0 +1,2 @@
+_target_: src.models.architectures.seresnet_replacement.SEResnet18_Baseline
+num_classes: ${dataset.num_classes}

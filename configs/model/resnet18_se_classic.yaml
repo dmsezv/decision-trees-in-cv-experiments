@@ -1,3 +1,0 @@
-_target_: src.models.architectures.se_replacement.ResNet18_Classic_SE
-num_classes: ${dataset.num_classes}
-reduction: 4

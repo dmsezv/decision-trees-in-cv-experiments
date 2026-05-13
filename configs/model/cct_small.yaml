@@ -1,2 +1,0 @@
-_target_: src.models.architectures.cct.CCT_Small
-num_classes: ${dataset.num_classes}

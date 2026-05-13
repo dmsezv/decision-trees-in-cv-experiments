@@ -1,5 +1,5 @@
 _target_: src.models.architectures.cct_replacement.CCT_4_NODE_FFN
 num_classes: ${dataset.num_classes}
 layer_dim: 8
-num_layers: 2
-depth: 4
+num_layers: 1
+depth: 3

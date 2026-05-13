@@ -226,3 +226,5 @@ mlflow.db
 
 # Other
 /checkpoints
+
+/notebooks

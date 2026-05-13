@@ -74,16 +74,17 @@ class CCT_4_NODE_FFN(nn.Module):
         return self.cct(x)
 
     def initial_weights(self, loader, device):
-        self.eval()
-        total = 0
+        self.train()
+        init_inputs = []
         with torch.no_grad():
             for x, _ in loader:
-                x = x.to(device)
-                _ = self.cct(x)
-                total += x.shape[0]
-                if total >= 1000:
+                init_inputs.append(x.to(device))
+                if sum(t.shape[0] for t in init_inputs) >= 1000:
                     break
-
+        
+        full_batch = torch.cat(init_inputs, dim=0)[:1000]
+        _ = self.forward(full_batch)
+        
 
 class CCT_4_NODE_Head(nn.Module):
     def __init__(self, num_classes, layer_dim, num_layers, depth):

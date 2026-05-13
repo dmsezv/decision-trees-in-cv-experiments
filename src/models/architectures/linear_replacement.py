@@ -40,7 +40,7 @@ class ResNet18_NODE(nn.Module):
 
     def forward(self, x):
         features = self.resnet18(x)
-        features = torch.flatten(features, 1)  # [b, 512]
+        features = torch.flatten(features, 1)
         features = self.bn1(features)
         out = self.node_head(features)
         return out.mean(dim=1)

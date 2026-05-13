@@ -1,2 +1,0 @@
-_target_: src.models.architectures.cct_test.CVT_Baseline
-num_classes: ${dataset.num_classes}

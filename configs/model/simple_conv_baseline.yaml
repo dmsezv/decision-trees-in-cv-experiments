@@ -1,2 +1,0 @@
-_target_: src.models.architectures.se_replacement.SimpleConv_Baseline
-num_classes: ${dataset.num_classes}

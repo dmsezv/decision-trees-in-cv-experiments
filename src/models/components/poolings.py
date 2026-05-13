@@ -13,5 +13,5 @@ class SpatialAttentionPooling(nn.Module):
         attn_weights = self.attention(x).view(b, 1, h * w)
         attn_weights = self.softmax(attn_weights)
         features = x.view(b, c, h * w)
-        pooled = torch.bmm(features, attn_weights.transpose(1, 2)).squeeze(-1)  # [b, c]
+        pooled = torch.bmm(features, attn_weights.transpose(1, 2)).squeeze(-1)
         return pooled
